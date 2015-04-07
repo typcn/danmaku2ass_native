@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <string.h>
+#include <time.h>
 #include <map>
 #include <iostream>
 #include <fstream>
@@ -45,6 +46,7 @@ bool ConvertBilibiliComment(const char *xml,const char *outfile,int width,int he
     doc.parse<0>(xmlFile.data());
     xml_node<> *node = doc.first_node("i");
     // UNCOMPLETE !!!
+	return true;
 }
 
 /*
@@ -97,7 +99,7 @@ int main(int argc,char *argv[]){
 		char *str = strchr(param,'='); // Get value for param
 		if(str){
 			int pos = (int)(str - param); // Get position of "="
-			char keybuf[pos-1];
+			char *keybuf = (char *)malloc(pos-1 * sizeof(char));
 			strncpy(keybuf, param + 1, (size_t)pos-1); // Get key for param
 			keybuf[pos-1] = '\0';
 			args[keybuf] = str+1;
