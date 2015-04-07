@@ -2,15 +2,20 @@
 #include <string.h>
 #include <map>
 #include <iostream>
+#include <fstream>
 
 using namespace std;
 
-void ReadComments(){
-
+int GetCommentType(string headline){
+	cout << headline;
 }
 
 void danmaku2ass(const char *infile,const char *outfile,int width,int height,const char *font,float fontsize,float alpha,float duration_marquee,float duration_still){
-
+	ifstream in;
+	in.open(infile, ios::in );
+	string headline;
+	in >> headline;
+	GetCommentType(headline);
 }
 
 int main(int argc,char *argv[]){
@@ -28,8 +33,6 @@ int main(int argc,char *argv[]){
 			strncpy(keybuf, param + 1, (size_t)pos-1); // Get key for param
 			keybuf[pos-1] = '\0';
 			args[keybuf] = str+1;
-
-			printf("Key:%s value:%s \n",keybuf,str+1);
 		}else{
 			continue;
 		}
