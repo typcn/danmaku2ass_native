@@ -4,7 +4,11 @@
 #include <iostream>
 #include <fstream>
 
+#include "rapidxml/rapidxml.hpp"
+#include "rapidxml/rapidxml_utils.hpp"
+
 using namespace std;
+using namespace rapidxml;
 
 /*
     Get comment type
@@ -35,6 +39,14 @@ int GetCommentType(string headline){
     }
 }
 
+bool ConvertBilibiliComment(const char *xml,const char *outfile,int width,int height,const char *font,float fontsize,float alpha,float duration_marquee,float duration_still){
+    rapidxml::file<> xmlFile(xml);
+    rapidxml::xml_document<> doc;
+    doc.parse<0>(xmlFile.data());
+    xml_node<> *node = doc.first_node("i");
+    // UNCOMPLETE !!!
+}
+
 /*
     Convert comments to .ass subtitle
  
@@ -51,13 +63,32 @@ int GetCommentType(string headline){
 void danmaku2ass(const char *infile,const char *outfile,int width,int height,const char *font,float fontsize,float alpha,float duration_marquee,float duration_still){
     std::ifstream input(infile);
     string headline;
-    getline( input, headline);
-	GetCommentType(headline);
+    getline(input,headline);
+	int type = GetCommentType(headline);
+    if(type == 1){
+        //cout << "Avfun format detected ! Converting..." << endl;
+        cout << "Sorry , The format is not supported" << endl;
+    }else if(type == 2){
+        cout << "Bilibili format detected ! Converting..." << endl;
+        bool result = ConvertBilibiliComment(infile,outfile,width,height,font,fontsize,alpha,duration_marquee,duration_still);
+        if(result){
+            cout << "Convert succeed" << endl;
+        }else{
+            cout << "Convert failed" << endl;
+        }
+    }else if(type == 3){
+        //cout << "Niconico format detected ! Converting..." << endl;
+        cout << "Sorry , The format is not supported" << endl;
+    }else{
+        cout << "ERROR: Unable to get comment type" << endl;
+    }
+    input.close();
 }
 
 int main(int argc,char *argv[]){
-	printf("Starting danmaku2ass native\n");
-
+	cout << "Starting danmaku2ass native..." << endl;
+    clock_t begin = clock();
+    
 	map<string,string> args;
 
 	int count;
@@ -87,5 +118,10 @@ int main(int argc,char *argv[]){
         stof(args["ds"]) // Duration of still comment
     );
 
+    clock_t end = clock();
+    double elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
+    
+    cout << "Exiting... Time taken:" << elapsed_secs << "s"<< endl;
+    
 	return 0;
 }
