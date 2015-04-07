@@ -6,15 +6,52 @@
 
 using namespace std;
 
+/*
+    Get comment type
+    
+    headline: the first line of comment file
+    
+    Return:
+        1 - Acfun
+        2 - Bilibili
+        3 - Niconico
+*/
+
 int GetCommentType(string headline){
-	cout << headline;
+    if(headline.find("xml version=\"1.0\" encoding=\"UTF-8\"?><p") != std::string::npos){
+        return 3;
+    }else if(headline.find("!-- BoonSutazioData=") != std::string::npos){
+        return 3;
+    }else if(headline.find("xml version=\"1.0\" encoding=\"UTF-8\"?><i") != std::string::npos){
+        return 2;
+    }else if(headline.find("xml version=\"1.0\" encoding=\"utf-8\"?><i") != std::string::npos){
+        return 2;
+    }else if(headline.find("xml version=\"1.0\" encoding=\"Utf-8\"?>\n") != std::string::npos){
+        return 2;
+    }else if(headline.find("\"commentList\":[") != std::string::npos){
+        return 1;
+    }else{
+        return 0;
+    }
 }
 
+/*
+    Convert comments to .ass subtitle
+ 
+    infile: comment file path
+    outfile: output file path
+    width: video width
+    height: video height
+    font: font name
+    alpha: comment alpha
+    duration_marquee:Duration of scrolling comment
+    duration_still:Duration of still comment
+*/
+
 void danmaku2ass(const char *infile,const char *outfile,int width,int height,const char *font,float fontsize,float alpha,float duration_marquee,float duration_still){
-	ifstream in;
-	in.open(infile, ios::in );
-	string headline;
-	in >> headline;
+    std::ifstream input(infile);
+    string headline;
+    getline( input, headline);
 	GetCommentType(headline);
 }
 
@@ -38,7 +75,17 @@ int main(int argc,char *argv[]){
 		}
 	}
 
-	danmaku2ass(args["in"].c_str(),args["out"].c_str(),stoi(args["w"]),stoi(args["h"]),args["font"].c_str(),stof(args["fontsize"]),stof(args["alpha"]),stof(args["dm"]),stof(args["ds"]));
+    danmaku2ass(
+        args["in"].c_str(), // Input file ( must be utf-8 )
+        args["out"].c_str(), // Output file
+        stoi(args["w"]), // Video width
+        stoi(args["h"]), // Video height
+        args["font"].c_str(), // Comment Font
+        stof(args["fontsize"]), // Font Size
+        stof(args["alpha"]), // Comment Alpha
+        stof(args["dm"]), // Duration of scrolling comment
+        stof(args["ds"]) // Duration of still comment
+    );
 
 	return 0;
 }

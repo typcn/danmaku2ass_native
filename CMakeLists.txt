@@ -5,6 +5,6 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 
 set(SOURCE_FILES
     danmaku2ass.cpp
-    danmaku2ass.hpp)
+    danmaku2ass.h)
 
 add_executable(danmaku2ass_native ${SOURCE_FILES})
