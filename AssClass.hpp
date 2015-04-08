@@ -16,12 +16,24 @@
 class Ass{
 private:
     std::ofstream out;
-    std::map <int, std::string> comment_map;
+    std::map <float, std::string> comment_map;
     int round_int( double r );
+    char style_name[10];
+    inline std::string TS2t(double timestamp);
+    
+    int duration_marquee;
+    int duration_still;
+    
+    int VideoWidth;
+    int VideoHeight;
+    
+    int FontSize;
+    
 public:
     void init(const char *filename);
+    void SetDuration(int dm,int ds);
     void WriteHead(int width,int height,const char *font,float fontsize,float alpha);
-    void AppendComment(float appear_time,int comment_mode,int font_size,const char *font_color,const char *content);
+    void AppendComment(float appear_time,int comment_mode,const char *font_color,const char *content);
     void WriteToDisk();
 };
 

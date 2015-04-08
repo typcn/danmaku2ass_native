@@ -24,27 +24,25 @@ using namespace rapidxml;
  */
 
 int GetCommentType(string headline){
-    if(headline.find("xml version=\"1.0\" encoding=\"UTF-8\"?><p") != std::string::npos){
-        return 3;
-    }else if(headline.find("!-- BoonSutazioData=") != std::string::npos){
-        return 3;
-    }else if(headline.find("xml version=\"1.0\" encoding=\"UTF-8\"?><i") != std::string::npos){
-        return 2;
-    }else if(headline.find("xml version=\"1.0\" encoding=\"utf-8\"?><i") != std::string::npos){
-        return 2;
-    }else if(headline.find("xml version=\"1.0\" encoding=\"Utf-8\"?>\n") != std::string::npos){
-        return 2;
-    }else if(headline.find("\"commentList\":[") != std::string::npos){
+    if(headline.find("\"commentList\":[") != std::string::npos){
         return 1;
-    }else{
-        return 0;
+    }else if(headline.find("xml version=\"1.0\" encoding=\"UTF-8\"?><i") != std::string::npos or
+             headline.find("xml version=\"1.0\" encoding=\"utf-8\"?><i") != std::string::npos or
+             headline.find("xml version=\"1.0\" encoding=\"Utf-8\"?>\n") != std::string::npos){
+        return 2;
+    }else if(headline.find("xml version=\"1.0\" encoding=\"UTF-8\"?><p") != std::string::npos or
+             headline.find("!-- BoonSutazioData=") != std::string::npos){
+        return 3;
     }
+    
+    return 0;
 }
 
 bool ConvertBilibiliComment(const char *xml,const char *outfile,int width,int height,const char *font,float fontsize,float alpha,float duration_marquee,float duration_still){
     Ass *ass = new Ass;
     
     ass->init(outfile);
+    ass->SetDuration(duration_marquee,duration_still);
     ass->WriteHead(width, height, font, fontsize,alpha);
     
     rapidxml::file<> xmlFile(xml);
@@ -74,21 +72,22 @@ bool ConvertBilibiliComment(const char *xml,const char *outfile,int width,int he
         p = strtok(NULL, separator);
         int comment_mode = atoi(p);
         
-        /* Arg3 : Font size */
+        /* Arg3 : Font size ( not needed )*/
         p = strtok(NULL, separator);
-        int font_size = atoi(p);
+        //int font_size = atoi(p);
         
-        /* Arg3 : Font color */
+        /* Arg4 : Font color */
         p = strtok(NULL, separator);
         char *font_color = p;
         
-        /* Arg4 : Unix timestamp ( not needed ) */
+        /* Arg5 : Unix timestamp ( not needed ) */
         /* Arg6 : comment pool ( not needed ) */
         /* Arg7 : sender uid ( not needed ) */
         /* Arg8 : database rowID ( not needed ) */
         
-        ass->AppendComment(appear_time, comment_mode, font_size, font_color, child->value());
+        ass->AppendComment(appear_time, comment_mode, font_color, child->value());
     }
+    
     
     ass->WriteToDisk();
     
