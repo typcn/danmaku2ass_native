@@ -7,8 +7,6 @@
 //
 
 #include "AssClass.hpp"
-#include <time.h>
-#include <timeconv.h>
 #include <iostream>
 #include <sstream>
 
