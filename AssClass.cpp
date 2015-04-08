@@ -67,7 +67,7 @@ void Ass::WriteHead(int width,int height,const char *font,float fontsize,float a
     out << "Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text" << endl;
 }
 
-void Ass::AppendComment(float appear_time,int comment_mode,const char *font_color,const char *content){
+void Ass::AppendComment(float appear_time,int comment_mode,int font_color,const char *content){
     int duration;
 
     string str = content;
@@ -87,8 +87,27 @@ void Ass::AppendComment(float appear_time,int comment_mode,const char *font_colo
     }else{
         return;
     }
+
+    string color = "";
+    if(font_color != 16777215){
+        if(font_color == 0x000000){
+            color = "\\c&H000000&";
+        }else if(font_color == 0xffffff){
+            color = "\\c&HFFFFFF&";
+        }else{
+            int R = (font_color >> 16) & 0xff;
+            int G = (font_color >> 8) & 0xff;
+            int B = font_color & 0xff;
+            char hexcolor[7];
+            sprintf(hexcolor, "%02X%02X%02X",R,G,B);
+            hexcolor[6] = '\0';
+            string strcolor(hexcolor);
+            color = "\\c&H" + strcolor + "&";
+        }
+    }
+
     stringstream ss;
-    ss << "Dialogue: 2," << TS2t(appear_time) << "," << TS2t(appear_time + duration) << "," << style_name << ",,0000,0000,0000,,{" << effect << "}" << content;
+    ss << "Dialogue: 2," << TS2t(appear_time) << "," << TS2t(appear_time + duration) << "," << style_name << ",,0000,0000,0000,,{" << effect << color << "}" << content;
     
     comment_map.insert(std::pair<float, std::string>(appear_time,ss.str()));
     

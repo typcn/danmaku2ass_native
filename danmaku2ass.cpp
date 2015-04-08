@@ -79,7 +79,7 @@ bool ConvertBilibiliComment(const char *xml,const char *outfile,int width,int he
         
         /* Arg4 : Font color */
         p = strtok(NULL, separator);
-        char *font_color = p;
+        int font_color = atoi(p);
         
         /* Arg5 : Unix timestamp ( not needed ) */
         /* Arg6 : comment pool ( not needed ) */
@@ -133,6 +133,7 @@ void danmaku2ass(const char *infile,const char *outfile,int width,int height,con
     input.close();
 }
 
+#ifndef __danmaku2ass_native__NoMainFunc__
 
 int main(int argc,char *argv[]){
     cout << "Starting danmaku2ass native..." << endl;
@@ -161,7 +162,7 @@ int main(int argc,char *argv[]){
                 stoi(args["w"]), // Video width
                 stoi(args["h"]), // Video height
                 args["font"].c_str(), // Comment Font
-                stof(args["fontsize"]), // Font Size
+                stoi(args["fontsize"]), // Font Size
                 stof(args["alpha"]), // Comment Alpha
                 stof(args["dm"]), // Duration of scrolling comment
                 stof(args["ds"]) // Duration of still comment
@@ -174,3 +175,5 @@ int main(int argc,char *argv[]){
     
     return 0;
 }
+
+#endif

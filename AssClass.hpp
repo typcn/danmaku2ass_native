@@ -36,7 +36,7 @@ public:
     void init(const char *filename);
     void SetDuration(int dm,int ds);
     void WriteHead(int width,int height,const char *font,float fontsize,float alpha);
-    void AppendComment(float appear_time,int comment_mode,const char *font_color,const char *content);
+    void AppendComment(float appear_time,int comment_mode,int font_color,const char *content);
     void WriteToDisk();
 };
 
