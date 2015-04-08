@@ -7,6 +7,7 @@
 //
 
 #include "AssClass.hpp"
+#include "string.h"
 #include <iostream>
 #include <sstream>
 
