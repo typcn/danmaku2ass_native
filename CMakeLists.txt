@@ -10,6 +10,8 @@ set(SOURCE_FILES
     rapidxml/rapidxml_print.hpp
     rapidxml/rapidxml_utils.hpp
     rapidxml/rapidxml.hpp
+    AssClass.cpp
+    AssClass.hpp
 	)
 
 add_executable(danmaku2ass_native ${SOURCE_FILES})
