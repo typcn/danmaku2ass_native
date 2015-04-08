@@ -16,6 +16,7 @@ install:
   - tar xf lcov_1.11.orig.tar.gz
   - sudo make -C lcov-1.11/ install
   - gem install coveralls-lcov
+  - sudo cp -v `which gcov-4.8` `which gcov`
 
 script:
   - $CXX --version
