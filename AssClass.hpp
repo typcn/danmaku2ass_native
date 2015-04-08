@@ -19,7 +19,10 @@ private:
     std::map <float, std::string> comment_map;
     int round_int( double r );
     char style_name[10];
+    
     inline std::string TS2t(double timestamp);
+    
+    inline size_t Utf8StringSize(const std::string& str);
     
     int duration_marquee;
     int duration_still;

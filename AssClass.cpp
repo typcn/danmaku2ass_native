@@ -7,7 +7,8 @@
 //
 
 #include "AssClass.hpp"
-#include "string.h"
+#include <string.h>
+#include <iconv.h>
 #include <iostream>
 #include <sstream>
 
@@ -68,7 +69,10 @@ void Ass::WriteHead(int width,int height,const char *font,float fontsize,float a
 
 void Ass::AppendComment(float appear_time,int comment_mode,const char *font_color,const char *content){
     int duration;
-    int ContentFontLen =(int)strlen(content)*FontSize;
+
+    string str = content;
+    
+    int ContentFontLen = Utf8StringSize(str);
     
     char effect[30];
     if(comment_mode < 4){
@@ -107,6 +111,29 @@ inline string Ass::TS2t(double timestamp){
     sprintf(buff,"%d:%02d:%02d.%02d", hour,minute,second,centsecond);
     return string(buff);
 }
+
+template<typename _Iterator1, typename _Iterator2>
+inline size_t IncUtf8StringIterator(_Iterator1& it, const _Iterator2& last) {
+    if(it == last) return 0;
+    unsigned char c;
+    size_t res = 1;
+    for(++it; last != it; ++it, ++res) {
+        c = *it;
+        if(!(c&0x80) || ((c&0xC0) == 0xC0)) break;
+    }
+    
+    return res;
+}
+
+inline size_t Ass::Utf8StringSize(const std::string& str)  {
+    size_t res = 0;
+    std::string::const_iterator it = str.begin();
+    for(; it != str.end(); IncUtf8StringIterator(it, str.end()))
+        res++;
+    
+    return res;
+}
+
 
 void Ass::WriteToDisk(){
     typedef std::map<float, std::string>::iterator it_type;

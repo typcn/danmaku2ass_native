@@ -33,8 +33,9 @@ int GetCommentType(string headline){
     }else if(headline.find("xml version=\"1.0\" encoding=\"UTF-8\"?><p") != std::string::npos or
              headline.find("!-- BoonSutazioData=") != std::string::npos){
         return 3;
+    }else{
+        return 0;
     }
-    
     return 0;
 }
 
