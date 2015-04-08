@@ -41,10 +41,52 @@ int GetCommentType(string headline){
 }
 
 bool ConvertBilibiliComment(const char *xml,const char *outfile,int width,int height,const char *font,float fontsize,float alpha,float duration_marquee,float duration_still){
-    rapidxml::file<> xmlFile(xml);
+	std::ofstream out(outfile);
+
+	rapidxml::file<> xmlFile(xml);
     rapidxml::xml_document<> doc;
     doc.parse<0>(xmlFile.data());
-    xml_node<> *node = doc.first_node("i");
+    xml_node<> *node = doc.first_node("i"); // Get comment main node
+
+	for (xml_node<> *child = node->first_node("d"); child; child = child->next_sibling()) // Each comment
+	{
+		const char *separator = ","; // Separator of comment properties
+		char *p;
+		
+		/* Arg1 : Appear time
+		   The time of comment appear.
+		*/
+		p = strtok(child->first_attribute("p")->value(), separator);
+		float appear_time = atof(p);
+
+		/* Arg2 : Comment mode
+			123 - Scroll comment
+			4 - Bottom comment
+			5 - Top comment
+			6 - Reverse comment
+			7 - Positioned comment
+			8 - Javascript comment ( not convert )
+		*/
+		p = strtok(NULL, separator);
+		int comment_mode = atoi(p);
+
+		/* Arg3 : Font size */
+		p = strtok(NULL, separator);
+		int font_size = atoi(p);
+
+		/* Arg3 : Font color */
+		p = strtok(NULL, separator);
+		char *font_color = p;
+
+		/* Arg4 : Unix timestamp ( not needed ) */
+		/* Arg6 : comment pool ( not needed ) */
+		/* Arg7 : sender uid ( not needed ) */
+		/* Arg8 : database rowID ( not needed ) */
+
+
+
+		out << child->value() << endl;
+	}
     // UNCOMPLETE !!!
 	return true;
 }
