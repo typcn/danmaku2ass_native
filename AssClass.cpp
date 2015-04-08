@@ -72,7 +72,7 @@ void Ass::AppendComment(float appear_time,int comment_mode,const char *font_colo
 
     string str = content;
     
-    int ContentFontLen = Utf8StringSize(str);
+    int ContentFontLen = Utf8StringSize(str)*FontSize;
     
     char effect[30];
     if(comment_mode < 4){
@@ -134,10 +134,61 @@ inline size_t Ass::Utf8StringSize(const std::string& str)  {
     return res;
 }
 
+static inline std::string ReplaceAll(std::string str, const std::string& from, const std::string& to) {
+    size_t start_pos = 0;
+    while((start_pos = str.find(from, start_pos)) != std::string::npos) {
+        str.replace(start_pos, from.length(), to);
+        start_pos += to.length(); // Handles case where 'to' is a substring of 'from'
+    }
+    return str;
+}
 
 void Ass::WriteToDisk(){
     typedef std::map<float, std::string>::iterator it_type;
+    
+    float MTime = 0;
+    float TopTime = 0;
+    float BottomTime = 0;
+    
+    int MROW = 0;
+    int TopROW = 0;
+    int BottomROW = 0;
+    
     for(it_type iterator = comment_map.begin(); iterator != comment_map.end(); iterator++) {
-        out << iterator->second << endl;
+        string r = iterator->second;
+        
+        if(r.find("[MROW]") != std::string::npos){
+            float timeago =  iterator->first - MTime;
+            if(timeago > 1){
+                MROW = 0;
+                MTime = iterator->first;
+            }else{
+                MROW++;
+            }
+            r = ReplaceAll(r,"[MROW]",to_string(MROW*FontSize));
+        }else if(r.find("[TopROW]") != std::string::npos){
+            float timeago =  iterator->first - TopTime;
+            if(timeago > 1){
+                TopROW = 0;
+                TopTime = iterator->first;
+            }else{
+                TopROW++;
+            }
+            r = ReplaceAll(r,"[TopROW]",to_string(TopROW*FontSize));
+            cout << r << endl;
+        }else if(r.find("[BottomROW]") != std::string::npos){
+            float timeago =  iterator->first - BottomTime;
+            if(timeago > 1){
+                BottomROW = 0;
+                BottomTime = iterator->first;
+            }else{
+                BottomROW++;
+            }
+            r = ReplaceAll(r,"[BottomROW]",to_string(-BottomROW*FontSize));
+        }else{
+            continue;
+        }
+        
+        out << r << endl;
     }
 }
