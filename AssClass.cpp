@@ -175,7 +175,6 @@ void Ass::WriteToDisk(){
                 TopROW++;
             }
             r = ReplaceAll(r,"[TopROW]",to_string(TopROW*FontSize));
-            cout << r << endl;
         }else if(r.find("[BottomROW]") != std::string::npos){
             float timeago =  iterator->first - BottomTime;
             if(timeago > 1){

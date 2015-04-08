@@ -19,6 +19,8 @@ install:
   - sudo cp -v `which gcov-4.8` `which gcov`
 
 script:
+  - rm -rf CMakeLists.txt
+  - cp ./tests/CMakeLists.txt ./CMakeLists.txt
   - $CXX --version
   - mkdir Build
   - cd Build
