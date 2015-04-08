@@ -1,0 +1,10 @@
+language: cpp
+
+compiler:
+  - gcc
+
+script:
+  - mkdir Build
+  - cd Build
+  - cmake ..
+  - make
