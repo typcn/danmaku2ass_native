@@ -12,6 +12,7 @@ install:
   # g++4.8.1
   - if [ "$CXX" = "g++" ]; then sudo apt-get install -qq g++-4.8; fi
   - if [ "$CXX" = "g++" ]; then export CXX="g++-4.8"; fi
+  - gem install coveralls-lcov
 
 script:
   - $CXX --version
@@ -19,3 +20,5 @@ script:
   - cd Build
   - cmake ..
   - make
+
+after_success: ../tests/test.sh
