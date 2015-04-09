@@ -25,7 +25,7 @@ void Ass::SetDuration(int dm,int ds){
 
 void Ass::WriteHead(int width,int height,const char *font,float fontsize,float alpha){
     
-    srand(time(0));
+    srand((int)time(0));
     
     FontSize = fontsize;
     VideoHeight = height;
@@ -72,7 +72,7 @@ void Ass::AppendComment(float appear_time,int comment_mode,int font_color,const 
 
     string str = content;
     
-    int ContentFontLen = Utf8StringSize(str)*FontSize;
+    int ContentFontLen = (int)Utf8StringSize(str)*FontSize;
     
     char effect[30];
     if(comment_mode < 4){
@@ -99,7 +99,7 @@ void Ass::AppendComment(float appear_time,int comment_mode,int font_color,const 
             int G = (font_color >> 8) & 0xff;
             int B = font_color & 0xff;
             char hexcolor[7];
-            sprintf(hexcolor, "%02X%02X%02X",R,G,B);
+            sprintf(hexcolor, "%02X%02X%02X",B,G,R);
             hexcolor[6] = '\0';
             string strcolor(hexcolor);
             color = "\\c&H" + strcolor + "&";
