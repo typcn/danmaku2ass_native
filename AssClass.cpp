@@ -118,14 +118,16 @@ int Ass::round_int( double r ) {
 }
 
 inline string Ass::TS2t(double timestamp){
-    int ts=timestamp*100;
+    
+    int ts= (int)timestamp*100.0;
     int hour,minute,second,centsecond;
-    hour = ts/36000;
-    minute = ts%36000;
+    hour = ts/360000;
+    minute = ts%360000;
     second = minute%6000;
     minute = minute/6000;
     centsecond = second%100;
     second = second/100;
+    cout << "TS:" << timestamp << " TSC:" << ts << " H:" << hour << " M:" << minute << " S:" << second << endl;
     char buff[20];
     sprintf(buff,"%d:%02d:%02d.%02d", hour,minute,second,centsecond);
     return string(buff);
@@ -169,16 +171,16 @@ void Ass::WriteToDisk(){
     float TopTime = 0;
     float BottomTime = 0;
     
-    int MROW = 0;
-    int TopROW = 0;
-    int BottomROW = 0;
+    int MROW = -1;
+    int TopROW = -1;
+    int BottomROW = -1;
     
     for(it_type iterator = comment_map.begin(); iterator != comment_map.end(); iterator++) {
         string r = iterator->second;
         
         if(r.find("[MROW]") != std::string::npos){
             float timeago =  iterator->first - MTime;
-            if(timeago > 1){
+            if(timeago > duration_marquee/4){
                 MROW = 0;
                 MTime = iterator->first;
             }else{
@@ -187,7 +189,7 @@ void Ass::WriteToDisk(){
             r = ReplaceAll(r,"[MROW]",to_string(MROW*FontSize));
         }else if(r.find("[TopROW]") != std::string::npos){
             float timeago =  iterator->first - TopTime;
-            if(timeago > 1){
+            if(timeago > duration_still){
                 TopROW = 0;
                 TopTime = iterator->first;
             }else{
@@ -196,7 +198,7 @@ void Ass::WriteToDisk(){
             r = ReplaceAll(r,"[TopROW]",to_string(TopROW*FontSize));
         }else if(r.find("[BottomROW]") != std::string::npos){
             float timeago =  iterator->first - BottomTime;
-            if(timeago > 1){
+            if(timeago > duration_still){
                 BottomROW = 0;
                 BottomTime = iterator->first;
             }else{
