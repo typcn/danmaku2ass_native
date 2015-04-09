@@ -127,7 +127,6 @@ inline string Ass::TS2t(double timestamp){
     minute = minute/6000;
     centsecond = second%100;
     second = second/100;
-    cout << "TS:" << timestamp << " TSC:" << ts << " H:" << hour << " M:" << minute << " S:" << second << endl;
     char buff[20];
     sprintf(buff,"%d:%02d:%02d.%02d", hour,minute,second,centsecond);
     return string(buff);
