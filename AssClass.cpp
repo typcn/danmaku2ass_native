@@ -8,7 +8,7 @@
 
 #include "AssClass.hpp"
 #include <string.h>
-#include <iconv.h>
+#include <math.h>
 #include <iostream>
 #include <sstream>
 
@@ -109,7 +109,9 @@ void Ass::AppendComment(float appear_time,int comment_mode,int font_color,const 
     stringstream ss;
     ss << "Dialogue: 2," << TS2t(appear_time) << "," << TS2t(appear_time + duration) << "," << style_name << ",,0000,0000,0000,,{" << effect << color << "}" << content;
     
-    comment_map.insert(std::pair<float, std::string>(appear_time,ss.str()));
+    pair<int,std::string> contentPair = make_pair(ContentFontLen,ss.str());
+    
+    comment_map.insert( std::pair<float, std::pair<int,std::string>>(appear_time,contentPair) );
     
 }
 
@@ -164,28 +166,34 @@ static inline std::string ReplaceAll(std::string str, const std::string& from, c
 }
 
 void Ass::WriteToDisk(){
-    typedef std::map<float, std::string>::iterator it_type;
-    
-    float MTime = 0;
+    typedef std::map<float, pair<int,std::string>>::iterator it_type;
+
     float TopTime = 0;
     float BottomTime = 0;
     
-    int MROW = -1;
     int TopROW = -1;
     int BottomROW = -1;
     
+    int line = ceil(VideoHeight/FontSize);
+    
+    double *rows_available = new double[line]; // Scroll comment rows available times;
+    
     for(it_type iterator = comment_map.begin(); iterator != comment_map.end(); iterator++) {
-        string r = iterator->second;
+        string r = iterator->second.second;
+        
+        int playbackTime = iterator->first;
+        double TextWidth = iterator->second.first + 2.0; // Add some space between texts
+        double act_time = TextWidth / (((double)VideoWidth + TextWidth)/ (double)duration_marquee); // The time of last char visible on screen
         
         if(r.find("[MROW]") != std::string::npos){
-            float timeago =  iterator->first - MTime;
-            if(timeago > duration_marquee/4){
-                MROW = 0;
-                MTime = iterator->first;
-            }else{
-                MROW++;
+            for(int i=0;i < line;i++){
+                if(playbackTime > rows_available[i]){
+                    rows_available[i] = playbackTime + act_time;
+                    r = ReplaceAll(r,"[MROW]",to_string(i*FontSize));
+                    break;
+                }
             }
-            r = ReplaceAll(r,"[MROW]",to_string(MROW*FontSize));
+            
         }else if(r.find("[TopROW]") != std::string::npos){
             float timeago =  iterator->first - TopTime;
             if(timeago > duration_still){

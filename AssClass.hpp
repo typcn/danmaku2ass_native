@@ -16,7 +16,7 @@
 class Ass{
 private:
     std::ofstream out;
-    std::map <float, std::string> comment_map;
+    std::map <float, std::pair<int, std::string>> comment_map;
     int round_int( double r );
     char style_name[10];
     
