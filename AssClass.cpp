@@ -226,7 +226,7 @@ void Ass::WriteToDisk(){
             }else{
                 BottomROW++;
             }
-            r = ReplaceAll(r,"[BottomROW]",to_string(-BottomROW*FontSize));
+            r = ReplaceAll(r,"[BottomROW]",to_string(VideoHeight-BottomROW*FontSize));
         }else{
             continue;
         }
