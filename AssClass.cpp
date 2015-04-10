@@ -166,8 +166,12 @@ static inline std::string ReplaceAll(std::string str, const std::string& from, c
 }
 
 void Ass::WriteToDisk(){
+    
+    int All_Rows = 0;
+    int Dropped_Rows = 0;
+    
     typedef std::map<float, pair<int,std::string>>::iterator it_type;
-
+    
     float TopTime = 0;
     float BottomTime = 0;
     
@@ -180,6 +184,9 @@ void Ass::WriteToDisk(){
     double *rows_visible_time = new double[line]; // The time of last char visible on screen
     
     for(it_type iterator = comment_map.begin(); iterator != comment_map.end(); iterator++) {
+        
+        All_Rows++;
+        
         string r = iterator->second.second;
         
         int playbackTime = iterator->first;
@@ -200,6 +207,7 @@ void Ass::WriteToDisk(){
             }
             if(!Replaced){
                 r = "";
+                Dropped_Rows++;
             }
         }else if(r.find("[TopROW]") != std::string::npos){
             float timeago =  iterator->first - TopTime;
@@ -225,4 +233,6 @@ void Ass::WriteToDisk(){
         
         out << r << endl;
     }
+    
+    cout << "Comments:" << All_Rows << " Dropped:" << Dropped_Rows << endl;
 }
