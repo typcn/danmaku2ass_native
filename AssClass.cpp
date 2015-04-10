@@ -87,7 +87,7 @@ void Ass::AppendComment(float appear_time,int comment_mode,int font_color,const 
     }else{
         return;
     }
-
+    string effectStr(effect);
     string color = "";
     if(font_color != 16777215){
         if(font_color == 0x000000){
@@ -107,7 +107,7 @@ void Ass::AppendComment(float appear_time,int comment_mode,int font_color,const 
     }
 
     stringstream ss;
-    ss << "Dialogue: 2," << TS2t(appear_time) << "," << TS2t(appear_time + duration) << "," << style_name << ",,0000,0000,0000,,{" << effect << color << "}" << content;
+    ss << "Dialogue: 2," << TS2t(appear_time) << "," << TS2t(appear_time + duration) << "," << style_name << ",,0000,0000,0000,,{" << effectStr << color << "}" << content;
     
     pair<int,std::string> contentPair = make_pair(ContentFontLen,ss.str());
     
