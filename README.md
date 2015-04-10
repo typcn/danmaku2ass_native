@@ -16,7 +16,7 @@ Only support bilibili format , other websites will be added in soon.
 
 # Screenshot
 
-img src="http://blog-cdn.eqoe.cn/images/1428559449093.png!mini">
+![](http://blog.eqoe.cn/images/1428559449093.png)
 
 # Complie
 
@@ -32,7 +32,7 @@ CMake 2.6 or higher and C++ 11 compiler required.
 
 ## Command Line
 
-    ./danmaku2ass -in=弹幕文件 -out=输出文件 -w=视频宽度 -h=视频高度 -font="字体名称" -fontsize=字体大小 -alpha=透明度(0-1之间) -dm=滚动弹幕持续时间 -ds=渐隐弹幕持续时间
+    ./danmaku2ass -in=InputFile -out=OutputFile -w=VideoWidth -h=VideoHeight -font="FontName" -fontsize=FontSize -alpha=Alpha(0-1) -dm=ScrollCommentDisplayTime -ds=StillCommentDisplayTime
 
 ## Use in software
 
@@ -60,7 +60,7 @@ You can use ffmpeg to do that.
 
 Example usage:
 
-ffmpeg -i xxx.flv -vf ass=ASS文件 -vcodec libx264 -acodec copy xxx_cm.flv
+ffmpeg -i xxx.flv -vf ass=ASS File -vcodec libx264 -acodec copy xxx_cm.flv
 
 # About
 
