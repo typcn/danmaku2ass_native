@@ -176,24 +176,31 @@ void Ass::WriteToDisk(){
     
     int line = ceil(VideoHeight/FontSize);
     
-    double *rows_available = new double[line]; // Scroll comment rows available times;
+    double *rows_dismiss_time = new double[line]; // The time of scroll comment dismiss
+    double *rows_visible_time = new double[line]; // The time of last char visible on screen
     
     for(it_type iterator = comment_map.begin(); iterator != comment_map.end(); iterator++) {
         string r = iterator->second.second;
         
         int playbackTime = iterator->first;
         double TextWidth = iterator->second.first + 2.0; // Add some space between texts
-        double act_time = TextWidth / (((double)VideoWidth + TextWidth)/ (double)duration_marquee); // The time of last char visible on screen
+        double act_time = TextWidth / (((double)VideoWidth + TextWidth)/ (double)duration_marquee); // duration of last char visible on screen
         
         if(r.find("[MROW]") != std::string::npos){
+            bool Replaced = false;
             for(int i=0;i < line;i++){
-                if(playbackTime > rows_available[i]){
-                    rows_available[i] = playbackTime + act_time;
+                double Time_Arrive_Border = (playbackTime + (double)duration_marquee) - act_time; // The time of first char reach left border of video
+                if(Time_Arrive_Border > rows_dismiss_time[i] && playbackTime > rows_visible_time[i]){
+                    rows_dismiss_time[i] = playbackTime + (double) duration_marquee;
+                    rows_visible_time[i] = playbackTime + act_time;
                     r = ReplaceAll(r,"[MROW]",to_string(i*FontSize));
+                    Replaced = true;
                     break;
                 }
             }
-            
+            if(!Replaced){
+                r = "";
+            }
         }else if(r.find("[TopROW]") != std::string::npos){
             float timeago =  iterator->first - TopTime;
             if(timeago > duration_still){
