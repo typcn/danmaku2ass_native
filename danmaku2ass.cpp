@@ -8,6 +8,7 @@
 #include "rapidxml/rapidxml.hpp"
 #include "rapidxml/rapidxml_utils.hpp"
 #include "AssClass.hpp"
+#include "danmaku2ass.h"
 
 using namespace std;
 using namespace rapidxml;
@@ -40,6 +41,10 @@ int GetCommentType(string headline){
 }
 
 bool ConvertBilibiliComment(const char *xml,const char *outfile,int width,int height,const char *font,float fontsize,float alpha,float duration_marquee,float duration_still){
+    return ConvertBilibiliCommentWithBlockSettings(xml,outfile,width,height,font,fontsize,alpha,duration_marquee,duration_still,false);
+}
+
+bool ConvertBilibiliCommentWithBlockSettings(const char *xml,const char *outfile,int width,int height,const char *font,float fontsize,float alpha,float duration_marquee,float duration_still,bool removeBottom){
     Ass *ass = new Ass;
     
     ass->init(outfile);
@@ -90,7 +95,7 @@ bool ConvertBilibiliComment(const char *xml,const char *outfile,int width,int he
     }
     
     
-    ass->WriteToDisk();
+    ass->WriteToDisk(removeBottom);
     
     return true;
 }
@@ -132,6 +137,7 @@ void danmaku2ass(const char *infile,const char *outfile,int width,int height,con
     }
     input.close();
 }
+
 
 #ifndef __danmaku2ass_native__NoMainFunc__
 

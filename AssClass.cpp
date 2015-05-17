@@ -165,7 +165,7 @@ static inline std::string ReplaceAll(std::string str, const std::string& from, c
     return str;
 }
 
-void Ass::WriteToDisk(){
+void Ass::WriteToDisk(bool removeBottom){
     
     int All_Rows = 0;
     int Dropped_Rows = 0;
@@ -219,14 +219,18 @@ void Ass::WriteToDisk(){
             }
             r = ReplaceAll(r,"[TopROW]",to_string(TopROW*FontSize));
         }else if(r.find("[BottomROW]") != std::string::npos){
-            float timeago =  iterator->first - BottomTime;
-            if(timeago > duration_still){
-                BottomROW = 0;
-                BottomTime = iterator->first;
+            if(removeBottom){
+                continue;
             }else{
-                BottomROW++;
+                float timeago =  iterator->first - BottomTime;
+                if(timeago > duration_still){
+                    BottomROW = 0;
+                    BottomTime = iterator->first;
+                }else{
+                    BottomROW++;
+                }
+                r = ReplaceAll(r,"[BottomROW]",to_string(VideoHeight-BottomROW*FontSize));
             }
-            r = ReplaceAll(r,"[BottomROW]",to_string(VideoHeight-BottomROW*FontSize));
         }else{
             continue;
         }

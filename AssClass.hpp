@@ -37,7 +37,7 @@ public:
     void SetDuration(int dm,int ds);
     void WriteHead(int width,int height,const char *font,float fontsize,float alpha);
     void AppendComment(float appear_time,int comment_mode,int font_color,const char *content);
-    void WriteToDisk();
+    void WriteToDisk(bool removeBottom);
 };
 
 #endif /* defined(__danmaku2ass_native__AssClass__) */
