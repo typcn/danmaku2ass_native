@@ -66,4 +66,4 @@ ffmpeg -i xxx.flv -vf ass=ASS File -vcodec libx264 -acodec copy xxx_cm.flv
 
 Thanks for https://github.com/m13253/danmaku2ass
 
-License under GPLv2
+License: DO ANYTHING YOU WANT TO
