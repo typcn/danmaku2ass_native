@@ -21,7 +21,7 @@ void danmaku2ass(const char *infile,const char *outfile,int width,int height,con
 
 class bilibiliParser{
 private:
-    std::vector<char *> blockWords;
+    std::vector<const char *> blockWords;
     const char *in;
     const char *out;
     int width = 1280;
@@ -37,7 +37,7 @@ public:
     void SetFont(const char *name,float size){ font = name; fontsize = size; };
     void SetAlpha(float a){ alpha = a; };
     void SetDuration(float scroll,float still){ duration_marquee = scroll; duration_still = still; };
-    void SetBlockWord(char *word){ blockWords.push_back(word); };
+    void SetBlockWord(const char *word){ blockWords.push_back(word); };
     bool Convert(bool removeBottom);
 };
 
