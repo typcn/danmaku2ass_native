@@ -9,6 +9,7 @@
 #include "rapidxml/rapidxml_utils.hpp"
 #include "AssClass.hpp"
 #include "danmaku2ass.h"
+#include "danmaku2ass.hpp"
 
 using namespace std;
 using namespace rapidxml;
@@ -41,17 +42,26 @@ int GetCommentType(string headline){
 }
 
 bool ConvertBilibiliComment(const char *xml,const char *outfile,int width,int height,const char *font,float fontsize,float alpha,float duration_marquee,float duration_still){
-    return ConvertBilibiliCommentWithBlockSettings(xml,outfile,width,height,font,fontsize,alpha,duration_marquee,duration_still,false);
+    bilibiliParser *p = new bilibiliParser;
+    p->SetFile(xml, outfile);
+    p->SetRes(width, height);
+    p->SetFont(font, fontsize);
+    p->SetDuration(duration_marquee, duration_still);
+    p->SetAlpha(alpha);
+    return p->Convert(false);
 }
 
-bool ConvertBilibiliCommentWithBlockSettings(const char *xml,const char *outfile,int width,int height,const char *font,float fontsize,float alpha,float duration_marquee,float duration_still,bool removeBottom){
+bool bilibiliParser::Convert(bool removeBottom){
     Ass *ass = new Ass;
     
-    ass->init(outfile);
+    ass->init(out);
     ass->SetDuration(duration_marquee,duration_still);
     ass->WriteHead(width, height, font, fontsize,alpha);
     
-    rapidxml::file<> xmlFile(xml);
+    rapidxml::file<> xmlFile(in);
+    if(xmlFile.size() < 1){
+        return false;
+    }
     rapidxml::xml_document<> doc;
     doc.parse<0>(xmlFile.data());
     xml_node<> *node = doc.first_node("i"); // Get comment main node
