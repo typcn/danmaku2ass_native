@@ -72,7 +72,6 @@ bool bilibiliParser::Convert(bool removeBottom){
         bool isBlocked = false;
         for (auto i = blockWords.begin();i != blockWords.end(); i++ ){
             if(v.find(*i) != std::string::npos){
-                cout << "Blocked comment : " << v << endl;
                 isBlocked = true;
             }
         }
