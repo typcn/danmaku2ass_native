@@ -68,6 +68,18 @@ bool bilibiliParser::Convert(bool removeBottom){
     
     for (xml_node<> *child = node->first_node("d"); child; child = child->next_sibling()) // Each comment
     {
+        std::string v = child->value();
+        bool isBlocked = false;
+        for (auto i = blockWords.begin();i != blockWords.end(); i++ ){
+            if(v.find(*i) != std::string::npos){
+                cout << "Blocked comment : " << v << endl;
+                isBlocked = true;
+            }
+        }
+        if(isBlocked){
+            continue;
+        }
+
         const char *separator = ","; // Separator of comment properties
         char *p;
         

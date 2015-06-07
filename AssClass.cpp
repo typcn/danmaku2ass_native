@@ -15,6 +15,7 @@
 using namespace std;
 
 void Ass::init(const char *filename){
+    std::remove(filename);
     out.open(filename);
 }
 
