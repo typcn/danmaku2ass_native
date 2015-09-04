@@ -86,6 +86,7 @@ bool bilibiliParser::Convert(bool removeBottom){
          The time of comment appear.
          */
         p = strtok(child->first_attribute("p")->value(), separator);
+        if(!p){ continue; }
         float appear_time = atof(p);
         
         /* Arg2 : Comment mode
