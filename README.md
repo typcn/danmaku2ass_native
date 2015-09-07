@@ -20,7 +20,7 @@ Only support bilibili format , other websites will be added in soon.
 
 # Complie
 
-CMake 2.6 or higher and C++ 11 compiler required.
+CMake 2.6 or higher and C++ 11 compiler required. (GCC 4.8+, Clang 3.5+, MSVC 2013+ are tested) 
 
     git clone https://github.com/typcn/danmaku2ass_native.git
     mkdir Build
