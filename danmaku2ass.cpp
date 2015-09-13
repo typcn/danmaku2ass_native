@@ -4,6 +4,7 @@
 #include <map>
 #include <iostream>
 #include <fstream>
+#include <algorithm>
 #include <iso646.h>
 
 #include "rapidxml/rapidxml.hpp"
