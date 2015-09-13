@@ -73,7 +73,15 @@ void Ass::AppendComment(float appear_time,int comment_mode,int font_color,const 
 
     string str = content;
     
-    int ContentFontLen = (int)Utf8StringSize(str)*FontSize;
+    stripStr(str);
+    
+    size_t strLength = Utf8StringSize(str);
+    
+    if(strLength > 100){
+        return;
+    }
+    
+    int ContentFontLen = (int)strLength*FontSize;
     
     char effect[30];
     if(comment_mode < 4){
@@ -108,12 +116,17 @@ void Ass::AppendComment(float appear_time,int comment_mode,int font_color,const 
     }
 
     stringstream ss;
-    ss << "Dialogue: 2," << TS2t(appear_time) << "," << TS2t(appear_time + duration) << "," << style_name << ",,0000,0000,0000,,{" << effectStr << color << "}" << content;
+    ss << "Dialogue: 2," << TS2t(appear_time) << "," << TS2t(appear_time + duration) << "," << style_name << ",,0000,0000,0000,,{" << effectStr << color << "}" << str;
     
     pair<int,std::string> contentPair = make_pair(ContentFontLen,ss.str());
-    
+
     comment_map.insert( std::pair<float, std::pair<int,std::string>>(appear_time,contentPair) );
     
+}
+
+inline void Ass::stripStr(string in){
+    std::replace(in.begin(), in.end(), '\r', '\n');
+    std::replace(in.begin(), in.end(), '\n', ' ');
 }
 
 int Ass::round_int( double r ) {
@@ -233,6 +246,11 @@ void Ass::WriteToDisk(bool removeBottom){
                 r = ReplaceAll(r,"[BottomROW]",to_string(VideoHeight-BottomROW*FontSize));
             }
         }else{
+            continue;
+        }
+        
+        if(r.length() < 10){
+            Dropped_Rows++;
             continue;
         }
         

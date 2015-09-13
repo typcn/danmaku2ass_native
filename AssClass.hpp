@@ -21,7 +21,7 @@ private:
     char style_name[10];
     
     inline std::string TS2t(double timestamp);
-    
+    inline void stripStr(std::string in);
     inline size_t Utf8StringSize(const std::string& str);
     
     int duration_marquee;
