@@ -9,6 +9,7 @@
 #include "AssClass.hpp"
 #include <string.h>
 #include <math.h>
+#include <algorithm>
 #include <iostream>
 #include <sstream>
 #include <time.h>
