@@ -12,14 +12,19 @@ addons:
     packages:
     - cmake
     - g++-4.8
-    - lcov
+
+cache:
+  directories:
+  - $HOME/lcov
+
+before_install:
+  - bash ./tests/install-lcov.sh
 
 install:
   # g++4.8.1
   - export CXX="g++-4.8"
   - export GCOV="gcov-4.8"
   - gem install coveralls-lcov
-
 
 script:
   - rm -rf CMakeLists.txt
