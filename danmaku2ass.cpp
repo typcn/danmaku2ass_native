@@ -58,15 +58,20 @@ bool bilibiliParser::Convert(bool removeBottom){
     ass->init(out);
     ass->SetDuration(duration_marquee,duration_still);
     ass->WriteHead(width, height, font, fontsize,alpha);
-    
+
     rapidxml::file<> xmlFile(in);
     if(xmlFile.size() < 1){
         return false;
     }
     rapidxml::xml_document<> doc;
-    doc.parse<0>(xmlFile.data());
-    xml_node<> *node = doc.first_node("i"); // Get comment main node
-    
+    xml_node<> *node;
+    try {
+        doc.parse<0>(xmlFile.data());
+        node = doc.first_node("i"); // Get comment main node
+    }catch(const rapidxml::parse_error& e){
+        std::cerr << "Parse error: " << e.what() << std::endl;
+        return false;
+    }
     for (xml_node<> *child = node->first_node("d"); child; child = child->next_sibling()) // Each comment
     {
         std::string v = child->value();
