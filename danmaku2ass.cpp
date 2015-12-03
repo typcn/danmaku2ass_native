@@ -72,8 +72,17 @@ bool bilibiliParser::Convert(bool removeBottom){
         std::cerr << "Parse error: " << e.what() << std::endl;
         return false;
     }
+    if(!node){
+        return false;
+    }
+    if(!node->first_node("d")){
+        return false;
+    }
     for (xml_node<> *child = node->first_node("d"); child; child = child->next_sibling()) // Each comment
     {
+        if(!child){
+            continue;
+        }
         std::string v = child->value();
         bool isBlocked = false;
         for (auto i = blockWords.begin();i != blockWords.end(); i++ ){
