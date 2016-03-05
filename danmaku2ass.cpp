@@ -44,6 +44,13 @@ int GetCommentType(string headline){
 
 
 bool CommentParser::Convert(int type){
+    if(!type){
+        std::ifstream input(in);
+        string headline;
+        getline(input,headline);
+        type = GetCommentType(headline);
+        input.close();
+    }
     if(type == 2){
         return _convertBilibili();
     }else{
