@@ -18,8 +18,9 @@ void danmaku2ass(const char *infile,const char *outfile,int width,int height,con
 
 #ifndef bilibili_danmaku2ass_hpp
 #define bilibili_danmaku2ass_hpp
+int GetCommentType(std::string headline);
 
-class bilibiliParser{
+class CommentParser{
 private:
     std::vector<const char *> blockWords;
     const char *in;
@@ -31,6 +32,9 @@ private:
     float alpha = 0.8;
     float duration_marquee = 5;
     float duration_still = 5;
+    bool removeBottom;
+    
+    bool _convertBilibili();
 public:
     void SetFile(const char *infile,const char *outfile){ in = infile; out = outfile; };
     void SetRes(int w,int h){ width = w; height = h; };
@@ -38,7 +42,8 @@ public:
     void SetAlpha(float a){ alpha = a; };
     void SetDuration(float scroll,float still){ duration_marquee = scroll; duration_still = still; };
     void SetBlockWord(const char *word){ blockWords.push_back(word); };
-    bool Convert(bool removeBottom);
+    void SetRemoveBottom(bool r){ removeBottom = r; };
+    bool Convert(int type);
 };
 
 #endif

@@ -42,17 +42,16 @@ int GetCommentType(string headline){
     return 0;
 }
 
-bool ConvertBilibiliComment(const char *xml,const char *outfile,int width,int height,const char *font,float fontsize,float alpha,float duration_marquee,float duration_still){
-    bilibiliParser *p = new bilibiliParser;
-    p->SetFile(xml, outfile);
-    p->SetRes(width, height);
-    p->SetFont(font, fontsize);
-    p->SetDuration(duration_marquee, duration_still);
-    p->SetAlpha(alpha);
-    return p->Convert(false);
+
+bool CommentParser::Convert(int type){
+    if(type == 2){
+        return _convertBilibili();
+    }else{
+        return false;
+    }
 }
 
-bool bilibiliParser::Convert(bool removeBottom){
+bool CommentParser::_convertBilibili(){
     Ass *ass = new Ass;
     
     ass->init(out);
@@ -158,12 +157,18 @@ void danmaku2ass(const char *infile,const char *outfile,int width,int height,con
     string headline;
     getline(input,headline);
     int type = GetCommentType(headline);
+    CommentParser *p = new CommentParser;
+    p->SetFile(infile, outfile);
+    p->SetRes(width, height);
+    p->SetFont(font, fontsize);
+    p->SetDuration(duration_marquee, duration_still);
+    p->SetAlpha(alpha);
     if(type == 1){
         //cout << "Avfun format detected ! Converting..." << endl;
         cout << "Sorry , The format is not supported" << endl;
     }else if(type == 2){
         cout << "Bilibili format detected ! Converting..." << endl;
-        bool result = ConvertBilibiliComment(infile,outfile,width,height,font,fontsize,alpha,duration_marquee,duration_still);
+        bool result = p->Convert(type);
         if(result){
             cout << "Convert succeed" << endl;
         }else{
