@@ -199,6 +199,12 @@ void Ass::WriteToDisk(bool removeBottom){
     double *rows_dismiss_time = new double[line]; // The time of scroll comment dismiss
     double *rows_visible_time = new double[line]; // The time of last char visible on screen
     
+    for (int i = 0 ; i < line; i++) {
+        rows_dismiss_time[i] = 0;
+        rows_visible_time[i] = 0;
+    }
+    
+    
     for(it_type iterator = comment_map.begin(); iterator != comment_map.end(); iterator++) {
         
         All_Rows++;
