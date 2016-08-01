@@ -188,6 +188,7 @@ void danmaku2ass(const char *infile,const char *outfile,int width,int height,con
         cout << "ERROR: Unable to get comment type" << endl;
     }
     input.close();
+    delete p;
 }
 
 

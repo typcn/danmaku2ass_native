@@ -266,4 +266,6 @@ void Ass::WriteToDisk(bool removeBottom){
     }
     
     cout << "Comments:" << All_Rows << " Dropped:" << Dropped_Rows << endl;
+    delete[] rows_dismiss_time;
+    delete[] rows_visible_time;
 }
