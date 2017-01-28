@@ -10,6 +10,7 @@
 #include <string.h>
 #include <math.h>
 #include <algorithm>
+#include <vector>
 #include <iostream>
 #include <sstream>
 #include <time.h>
@@ -181,7 +182,7 @@ static inline std::string ReplaceAll(std::string str, const std::string& from, c
     return str;
 }
 
-void Ass::WriteToDisk(bool removeBottom){
+void Ass::WriteToDisk(std::vector<int> disallowModes){
     
     int All_Rows = 0;
     int Dropped_Rows = 0;
@@ -204,6 +205,19 @@ void Ass::WriteToDisk(bool removeBottom){
         rows_visible_time[i] = 0;
     }
     
+    bool removeMRow = 0;
+    bool removeTRow = 0;
+    bool removeBRow = 0;
+    for (auto i = disallowModes.begin();i != disallowModes.end(); i++ ){
+        int mode = *i;
+        if(mode == 1){
+            removeMRow = 1;
+        }else if(mode == 2){
+            removeTRow = 1;
+        }else if(mode == 3){
+            removeBRow = 1;
+        }
+    }
     
     for(it_type iterator = comment_map.begin(); iterator != comment_map.end(); iterator++) {
         
@@ -216,6 +230,9 @@ void Ass::WriteToDisk(bool removeBottom){
         double act_time = TextWidth / (((double)VideoWidth + TextWidth)/ (double)duration_marquee); // duration of last char visible on screen
         
         if(r.find("[MROW]") != std::string::npos){
+            if(removeMRow){
+                continue;
+            }
             bool Replaced = false;
             for(int i=0;i < line;i++){
                 double Time_Arrive_Border = (playbackTime + (double)duration_marquee) - act_time; // The time of first char reach left border of video
@@ -232,6 +249,9 @@ void Ass::WriteToDisk(bool removeBottom){
                 Dropped_Rows++;
             }
         }else if(r.find("[TopROW]") != std::string::npos){
+            if(removeTRow){
+                continue;
+            }
             float timeago =  iterator->first - TopTime;
             if(timeago > duration_still){
                 TopROW = 0;
@@ -241,7 +261,7 @@ void Ass::WriteToDisk(bool removeBottom){
             }
             r = ReplaceAll(r,"[TopROW]",to_string(TopROW*FontSize));
         }else if(r.find("[BottomROW]") != std::string::npos){
-            if(removeBottom){
+            if(removeBRow){
                 continue;
             }else{
                 float timeago =  iterator->first - BottomTime;

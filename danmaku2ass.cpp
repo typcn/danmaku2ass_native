@@ -141,7 +141,7 @@ bool CommentParser::_convertBilibili(){
     }
     
     
-    ass->WriteToDisk(removeBottom);
+    ass->WriteToDisk(disallowModes);
     
     return true;
 }

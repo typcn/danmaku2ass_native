@@ -23,6 +23,7 @@ int GetCommentType(std::string headline);
 class CommentParser{
 private:
     std::vector<const char *> blockWords;
+    std::vector<int> disallowModes;
     const char *in;
     const char *out;
     int width = 1280;
@@ -32,7 +33,6 @@ private:
     float alpha = 0.8;
     float duration_marquee = 5;
     float duration_still = 5;
-    bool removeBottom;
     
     bool _convertBilibili();
 public:
@@ -42,7 +42,7 @@ public:
     void SetAlpha(float a){ alpha = a; };
     void SetDuration(float scroll,float still){ duration_marquee = scroll; duration_still = still; };
     void SetBlockWord(const char *word){ blockWords.push_back(word); };
-    void SetRemoveBottom(bool r){ removeBottom = r; };
+    void AddDisallowMode(int mode){ disallowModes.push_back(mode); }; // 1 scroll 2 top 3 bottom
     bool Convert(int type);
 };
 
